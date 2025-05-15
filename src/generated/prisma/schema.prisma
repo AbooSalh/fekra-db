@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model coordinator {
+  Coordinator_id Int            @id
+  Name           String?        @db.VarChar(155)
+  enrollment     enrollment[]
+  organization   organization[]
+}
+
+model employee {
+  Employee_id Int    @id
+  Salary      Int?
+  Position    String @db.VarChar(150)
+  person      person @relation(fields: [Employee_id], references: [Person_id], onUpdate: Restrict, map: "employee_ibfk_1")
+}
+
+model enroll {
+  Student_id    Int
+  Course_id     String        @db.VarChar(155)
+  student       student       @relation(fields: [Student_id], references: [Student_id], onUpdate: Restrict, map: "enroll_ibfk_1")
+  fieldt_course fieldt_course @relation(fields: [Course_id], references: [Course_id], onUpdate: Restrict, map: "enroll_ibfk_2")
+
+  @@id([Student_id, Course_id])
+  @@index([Course_id], map: "Course_id")
+}
+
+model enrollment {
+  Enrollment_id  Int            @id
+  Student_id     Int?
+  Course_id      String?        @db.VarChar(155)
+  Semester       String?        @db.VarChar(155)
+  Final_grade    String?        @db.VarChar(2)
+  Coordinator_id Int?
+  student        student?       @relation(fields: [Student_id], references: [Student_id], onUpdate: Restrict, map: "enrollment_ibfk_1")
+  fieldt_course  fieldt_course? @relation(fields: [Course_id], references: [Course_id], onUpdate: Restrict, map: "enrollment_ibfk_2")
+  coordinator    coordinator?   @relation(fields: [Coordinator_id], references: [Coordinator_id], onUpdate: Restrict, map: "enrollment_ibfk_3")
+
+  @@unique([Student_id, Course_id, Semester], map: "Student_id")
+  @@index([Coordinator_id], map: "Coordinator_id")
+  @@index([Course_id], map: "Course_id")
+}
+
+model evaluation {
+  Evaluation_id Int     @id
+  Grade         String? @db.VarChar(2)
+}
+
+model external_mentor {
+  Ext_Mentor_id Int           @id
+  Org_id        Int?
+  mentor        mentor        @relation(fields: [Ext_Mentor_id], references: [Mentor_id], onUpdate: Restrict, map: "external_mentor_ibfk_1")
+  organization  organization? @relation(fields: [Org_id], references: [Org_id], onDelete: Restrict, onUpdate: Restrict, map: "external_mentor_ibfk_2")
+
+  @@index([Org_id], map: "Org_id")
+}
+
+model fieldt_course {
+  Course_id    String        @id @db.VarChar(155)
+  Name         String        @db.VarChar(155)
+  Duration     String        @db.VarChar(150)
+  Org_id       Int?
+  enroll       enroll[]
+  enrollment   enrollment[]
+  organization organization? @relation(fields: [Org_id], references: [Org_id], onDelete: Restrict, onUpdate: Restrict, map: "fieldt_course_ibfk_1")
+  mentor       mentor[]
+
+  @@index([Org_id], map: "Org_id")
+}
+
+model internal_mentor {
+  Int_Mentor_id Int      @id
+  Student_id    Int?
+  mentor        mentor   @relation(fields: [Int_Mentor_id], references: [Mentor_id], onUpdate: Restrict, map: "internal_mentor_ibfk_1")
+  student       student? @relation(fields: [Student_id], references: [Student_id], onDelete: Restrict, onUpdate: Restrict, map: "internal_mentor_ibfk_2")
+
+  @@index([Student_id], map: "Student_id")
+}
+
+model mentor {
+  Mentor_id       Int              @id
+  Course_id       String?          @db.VarChar(155)
+  external_mentor external_mentor?
+  internal_mentor internal_mentor?
+  person          person           @relation(fields: [Mentor_id], references: [Person_id], onUpdate: Restrict, map: "mentor_ibfk_1")
+  fieldt_course   fieldt_course?   @relation(fields: [Course_id], references: [Course_id], onDelete: Restrict, onUpdate: Restrict, map: "mentor_ibfk_2")
+
+  @@index([Course_id], map: "Course_id")
+}
+
+model organization {
+  Org_id          Int               @id
+  Name            String            @db.VarChar(155)
+  Contact_info    String            @db.VarChar(150)
+  Approval_Status String?           @db.VarChar(10)
+  Coordinator_id  Int?
+  external_mentor external_mentor[]
+  fieldt_course   fieldt_course[]
+  coordinator     coordinator?      @relation(fields: [Coordinator_id], references: [Coordinator_id], onDelete: Restrict, onUpdate: Restrict, map: "organization_ibfk_1")
+
+  @@index([Coordinator_id], map: "Coordinator_id")
+}
+
+model person {
+  Person_id Int       @id
+  Name      String    @db.VarChar(150)
+  Email     String?   @unique(map: "Email") @db.VarChar(255)
+  Sex       String?   @db.Char(1)
+  employee  employee?
+  mentor    mentor?
+  student   student?
+}
+
+model student {
+  Student_id      Int               @id
+  Level           String?           @db.Char(1)
+  Major_Dept      String            @db.VarChar(150)
+  Evaluation_id   Int?
+  enroll          enroll[]
+  enrollment      enrollment[]
+  internal_mentor internal_mentor[]
+  person          person            @relation(fields: [Student_id], references: [Person_id], onUpdate: Restrict, map: "student_ibfk_1")
+}

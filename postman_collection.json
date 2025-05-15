@@ -1,0 +1,536 @@
+{
+    "info": {
+        "name": "Fekra DB API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Persons",
+            "item": [
+                {
+                    "name": "Get All Persons",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/persons"
+                    }
+                },
+                {
+                    "name": "Create Person",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/persons",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Person_id\": 1,\n  \"Name\": \"John Doe\",\n  \"Email\": \"john@example.com\",\n  \"Sex\": \"M\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Get Person by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/persons/1"
+                    }
+                },
+                {
+                    "name": "Update Person",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/api/persons/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Name\": \"John Updated\",\n  \"Email\": \"john.updated@example.com\",\n  \"Sex\": \"M\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Person",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/persons/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Students",
+            "item": [
+                {
+                    "name": "Get All Students",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/students"
+                    }
+                },
+                {
+                    "name": "Create Student",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/students",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Person_id\": 2,\n  \"Name\": \"Jane Student\",\n  \"Email\": \"jane@example.com\",\n  \"Sex\": \"F\",\n  \"Level\": \"3\",\n  \"Major_Dept\": \"Computer Science\",\n  \"Evaluation_id\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Get Student by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/students/2"
+                    }
+                },
+                {
+                    "name": "Update Student",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/api/students/2",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Level\": \"4\",\n  \"Major_Dept\": \"Computer Science\",\n  \"Evaluation_id\": 2\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Student",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/students/2"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Organizations",
+            "item": [
+                {
+                    "name": "Get All Organizations",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/organizations"
+                    }
+                },
+                {
+                    "name": "Create Organization",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/organizations",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Org_id\": 1,\n  \"Name\": \"Tech Corp\",\n  \"Contact_info\": \"contact@techcorp.com\",\n  \"Approval_Status\": \"Approved\",\n  \"Coordinator_id\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Get Organization by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/organizations/1"
+                    }
+                },
+                {
+                    "name": "Update Organization",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/api/organizations/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Name\": \"Tech Corp Updated\",\n  \"Contact_info\": \"new.contact@techcorp.com\",\n  \"Approval_Status\": \"Pending\",\n  \"Coordinator_id\": 2\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Organization",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/organizations/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Fieldt Courses",
+            "item": [
+                {
+                    "name": "Get All Fieldt Courses",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/fieldt-courses"
+                    }
+                },
+                {
+                    "name": "Create Fieldt Course",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/fieldt-courses",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Course_id\": \"CS101\",\n  \"Name\": \"Introduction to Programming\",\n  \"Duration\": \"3 months\",\n  \"Org_id\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Get Fieldt Course by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/fieldt-courses/CS101"
+                    }
+                },
+                {
+                    "name": "Update Fieldt Course",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/api/fieldt-courses/CS101",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Name\": \"Advanced Programming\",\n  \"Duration\": \"4 months\",\n  \"Org_id\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Fieldt Course",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/fieldt-courses/CS101"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Mentors",
+            "item": [
+                {
+                    "name": "Get All Mentors",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/mentors"
+                    }
+                },
+                {
+                    "name": "Create Mentor",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/mentors",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Mentor_id\": 3,\n  \"Course_id\": \"CS101\",\n  \"Name\": \"Dr. Smith\",\n  \"Email\": \"smith@example.com\",\n  \"Sex\": \"M\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Get Mentor by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/mentors/3"
+                    }
+                },
+                {
+                    "name": "Update Mentor",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/api/mentors/3",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Course_id\": \"CS102\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Mentor",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/mentors/3"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "External Mentors",
+            "item": [
+                {
+                    "name": "Get All External Mentors",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/external-mentors"
+                    }
+                },
+                {
+                    "name": "Create External Mentor",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/external-mentors",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Ext_Mentor_id\": 4,\n  \"Org_id\": 1,\n  \"Name\": \"External Expert\",\n  \"Email\": \"expert@company.com\",\n  \"Sex\": \"F\",\n  \"Course_id\": \"CS101\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Get External Mentor by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/external-mentors/4"
+                    }
+                },
+                {
+                    "name": "Update External Mentor",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/api/external-mentors/4",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Org_id\": 2,\n  \"Course_id\": \"CS102\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete External Mentor",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/external-mentors/4"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Internal Mentors",
+            "item": [
+                {
+                    "name": "Get All Internal Mentors",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/internal-mentors"
+                    }
+                },
+                {
+                    "name": "Create Internal Mentor",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/internal-mentors",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Int_Mentor_id\": 5,\n  \"Student_id\": 2,\n  \"Name\": \"Internal Expert\",\n  \"Email\": \"internal@university.edu\",\n  \"Sex\": \"M\",\n  \"Course_id\": \"CS101\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Get Internal Mentor by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/internal-mentors/5"
+                    }
+                },
+                {
+                    "name": "Update Internal Mentor",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/api/internal-mentors/5",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Student_id\": 3,\n  \"Course_id\": \"CS102\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Internal Mentor",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/internal-mentors/5"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Enrollments",
+            "item": [
+                {
+                    "name": "Get All Enrollments",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/enrollments"
+                    }
+                },
+                {
+                    "name": "Create Enrollment",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/enrollments",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Enrollment_id\": 1,\n  \"Student_id\": 2,\n  \"Course_id\": \"CS101\",\n  \"Semester\": \"Fall 2024\",\n  \"Final_grade\": \"A\",\n  \"Coordinator_id\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Get Enrollment by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/enrollments/1"
+                    }
+                },
+                {
+                    "name": "Update Enrollment",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/api/enrollments/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Student_id\": 2,\n  \"Course_id\": \"CS102\",\n  \"Semester\": \"Spring 2025\",\n  \"Final_grade\": \"B+\",\n  \"Coordinator_id\": 2\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Enrollment",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/enrollments/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Evaluations",
+            "item": [
+                {
+                    "name": "Get All Evaluations",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/evaluations"
+                    }
+                },
+                {
+                    "name": "Create Evaluation",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/evaluations",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Evaluation_id\": 1,\n  \"Grade\": \"A\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Get Evaluation by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/evaluations/1"
+                    }
+                },
+                {
+                    "name": "Update Evaluation",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/api/evaluations/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Grade\": \"A+\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Evaluation",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/evaluations/1"
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000"
+        }
+    ]
+}
