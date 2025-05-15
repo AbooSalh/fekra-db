@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -16,7 +15,7 @@ model coordinator {
 }
 
 model employee {
-  Employee_id Int    @id
+  Employee_id     Int       @id @default(autoincrement())
   Salary      Int?
   Position    String @db.VarChar(150)
   person      person @relation(fields: [Employee_id], references: [Person_id], onUpdate: Restrict, map: "employee_ibfk_1")
@@ -85,7 +84,7 @@ model internal_mentor {
 }
 
 model mentor {
-  Mentor_id       Int              @id
+  Mentor_id       Int       @id @default(autoincrement())
   Course_id       String?          @db.VarChar(155)
   external_mentor external_mentor?
   internal_mentor internal_mentor?
@@ -109,17 +108,18 @@ model organization {
 }
 
 model person {
-  Person_id Int       @id
-  Name      String    @db.VarChar(150)
-  Email     String?   @unique(map: "Email") @db.VarChar(255)
-  Sex       String?   @db.Char(1)
-  employee  employee?
-  mentor    mentor?
-  student   student?
+  Person_id      Int       @id @default(autoincrement())
+  Name           String    @db.VarChar(150)
+  Email          String?   @unique(map: "Email") @db.VarChar(255)
+  HashedPassword String?   @db.VarChar(255)
+  Sex            String?   @db.Char(1)
+  employee       employee?
+  mentor         mentor?
+  student        student?
 }
 
 model student {
-  Student_id      Int               @id
+  Student_id      Int       @id @default(autoincrement())
   Level           String?           @db.Char(1)
   Major_Dept      String            @db.VarChar(150)
   Evaluation_id   Int?

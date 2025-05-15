@@ -15152,7 +15152,6 @@ export namespace Prisma {
   }
 
   export type personCreateInput = {
-    Person_id: number
     Name: string
     Email?: string | null
     Sex?: string | null
@@ -15162,7 +15161,7 @@ export namespace Prisma {
   }
 
   export type personUncheckedCreateInput = {
-    Person_id: number
+    Person_id?: number
     Name: string
     Email?: string | null
     Sex?: string | null
@@ -15172,7 +15171,6 @@ export namespace Prisma {
   }
 
   export type personUpdateInput = {
-    Person_id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
     Email?: NullableStringFieldUpdateOperationsInput | string | null
     Sex?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15192,14 +15190,13 @@ export namespace Prisma {
   }
 
   export type personCreateManyInput = {
-    Person_id: number
+    Person_id?: number
     Name: string
     Email?: string | null
     Sex?: string | null
   }
 
   export type personUpdateManyMutationInput = {
-    Person_id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
     Email?: NullableStringFieldUpdateOperationsInput | string | null
     Sex?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17012,7 +17009,6 @@ export namespace Prisma {
   }
 
   export type personCreateWithoutEmployeeInput = {
-    Person_id: number
     Name: string
     Email?: string | null
     Sex?: string | null
@@ -17021,7 +17017,7 @@ export namespace Prisma {
   }
 
   export type personUncheckedCreateWithoutEmployeeInput = {
-    Person_id: number
+    Person_id?: number
     Name: string
     Email?: string | null
     Sex?: string | null
@@ -17046,7 +17042,6 @@ export namespace Prisma {
   }
 
   export type personUpdateWithoutEmployeeInput = {
-    Person_id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
     Email?: NullableStringFieldUpdateOperationsInput | string | null
     Sex?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17704,7 +17699,6 @@ export namespace Prisma {
   }
 
   export type personCreateWithoutMentorInput = {
-    Person_id: number
     Name: string
     Email?: string | null
     Sex?: string | null
@@ -17713,7 +17707,7 @@ export namespace Prisma {
   }
 
   export type personUncheckedCreateWithoutMentorInput = {
-    Person_id: number
+    Person_id?: number
     Name: string
     Email?: string | null
     Sex?: string | null
@@ -17799,7 +17793,6 @@ export namespace Prisma {
   }
 
   export type personUpdateWithoutMentorInput = {
-    Person_id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
     Email?: NullableStringFieldUpdateOperationsInput | string | null
     Sex?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18172,7 +18165,6 @@ export namespace Prisma {
   }
 
   export type personCreateWithoutStudentInput = {
-    Person_id: number
     Name: string
     Email?: string | null
     Sex?: string | null
@@ -18181,7 +18173,7 @@ export namespace Prisma {
   }
 
   export type personUncheckedCreateWithoutStudentInput = {
-    Person_id: number
+    Person_id?: number
     Name: string
     Email?: string | null
     Sex?: string | null
@@ -18262,7 +18254,6 @@ export namespace Prisma {
   }
 
   export type personUpdateWithoutStudentInput = {
-    Person_id?: IntFieldUpdateOperationsInput | number
     Name?: StringFieldUpdateOperationsInput | string
     Email?: NullableStringFieldUpdateOperationsInput | string | null
     Sex?: NullableStringFieldUpdateOperationsInput | string | null

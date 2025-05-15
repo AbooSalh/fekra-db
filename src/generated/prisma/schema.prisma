@@ -109,7 +109,7 @@ model organization {
 }
 
 model person {
-  Person_id Int       @id
+  Person_id Int       @id @default(autoincrement())
   Name      String    @db.VarChar(150)
   Email     String?   @unique(map: "Email") @db.VarChar(255)
   Sex       String?   @db.Char(1)
