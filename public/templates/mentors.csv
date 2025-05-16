@@ -1,0 +1,5 @@
+# Note: Course_id must match an existing course ID from the list shown on the mentors page
+# Format: Name,Email,Sex,Course_id
+Name,Email,Sex,Course_id
+John Doe,john.doe@example.com,M,CS101
+Jane Smith,jane.smith@example.com,F,CS102 

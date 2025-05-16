@@ -31,6 +31,14 @@ export default function EnrollmentsPage() {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<{
+    message: string;
+    results?: {
+      success: number;
+      failed: number;
+      errors: string[];
+    };
+  } | null>(null);
 
   useEffect(() => {
     fetchEnrollments();
@@ -49,6 +57,40 @@ export default function EnrollmentsPage() {
     }
   };
 
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        window.location.href = "/auth/login";
+        return;
+      }
+      const response = await fetch("/api/enrollments/upload", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to upload file");
+      }
+      setUploadStatus(data);
+      // Refresh the enrollments list
+      fetchEnrollments();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload file");
+    }
+  };
+
   if (loading) return <div className="p-8">Loading...</div>;
   if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
 
@@ -57,13 +99,59 @@ export default function EnrollmentsPage() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Enrollments</h1>
-          <Link
-            href="/enrollments/new"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-          >
-            Add New Enrollment
-          </Link>
+          <div className="flex items-center space-x-4">
+            <Link
+              href="/enrollments/new"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+            >
+              Add New Enrollment
+            </Link>
+            {/* CSV Upload Section */}
+            <div className="flex items-center space-x-4">
+              <label className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 cursor-pointer">
+                Upload CSV
+                <input
+                  type="file"
+                  accept=".csv"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+              </label>
+              <a
+                href="/templates/enrollments.csv"
+                download
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                Download Template
+              </a>
+            </div>
+          </div>
         </div>
+
+        {/* Upload Status */}
+        {uploadStatus && (
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+            <p className="font-medium text-gray-900">{uploadStatus.message}</p>
+            {uploadStatus.results && (
+              <div className="mt-2 text-sm text-gray-600">
+                <p>Successfully imported: {uploadStatus.results.success}</p>
+                <p>Failed to import: {uploadStatus.results.failed}</p>
+                {uploadStatus.results.errors.length > 0 && (
+                  <div className="mt-2">
+                    <p className="font-medium">Errors:</p>
+                    <ul className="list-disc list-inside">
+                      {uploadStatus.results.errors.map((error, index) => (
+                        <li key={index} className="text-red-600">
+                          {error}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">

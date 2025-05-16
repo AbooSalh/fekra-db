@@ -1,0 +1,16 @@
+# Field Course CSV Template
+# Required fields: Course_id, Name, Duration
+# Optional fields: Org_id (must match an existing organization ID)
+# CSV Format: Course_id,Name,Duration,Org_id
+
+Course_id,Name,Duration,Org_id
+"CS101","Introduction to Programming","3 months",11
+"CS102","Web Development Fundamentals","4 months",12
+"CS103","Database Management","3 months",13
+"CS104","Mobile App Development","4 months",11
+"CS105","Cloud Computing","3 months",12
+"CS106","Artificial Intelligence","4 months",13
+"CS107","Cybersecurity","3 months",11
+"CS108","Data Science","4 months",12
+"CS109","Software Engineering","3 months",13
+"CS110","DevOps Practices","4 months",11 

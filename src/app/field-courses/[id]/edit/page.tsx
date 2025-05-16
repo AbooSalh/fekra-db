@@ -13,7 +13,16 @@ export default function EditFieldCoursePage() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`/api/fieldt-courses/${params.id}`);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "/auth/login";
+          return;
+        }
+        const response = await fetch(`/api/fieldt-courses/${params.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!response.ok) throw new Error("Failed to fetch course");
         const data = await response.json();
         setCourse(data);

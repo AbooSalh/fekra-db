@@ -1,0 +1,4 @@
+Student_id,Name,Email,Sex,Level,Major_Dept
+1,John Doe,john.doe@example.com,M,Senior,Computer Science
+2,Jane Smith,jane.smith@example.com,F,Junior,Mathematics
+3,Bob Johnson,bob.johnson@example.com,M,Sophomore,Physics 
