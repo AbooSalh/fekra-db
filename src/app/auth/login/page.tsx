@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,10 +17,16 @@ export default function LoginPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    // Check if user is already logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/");
+    }
+
     if (searchParams.get("registered") === "true") {
       setSuccessMessage("Registration successful! Please log in.");
     }
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,9 +51,10 @@ export default function LoginPage() {
         throw new Error(data.message || "Failed to log in");
       }
 
-      // Store the token and user role in localStorage
+      // Store the token in both localStorage and cookies
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", data.user.role);
+      Cookies.set("token", data.token, { expires: 1 }); // Expires in 1 day
 
       // Redirect to the dashboard or home page
       router.push("/");
@@ -68,15 +76,6 @@ export default function LoginPage() {
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Or{" "}
-          <Link
-            href="/auth/signup"
-            className="font-medium text-blue-600 hover:text-blue-500"
-          >
-            create a new account
-          </Link>
-        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

@@ -2,12 +2,43 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface UserProfile {
   id: number;
   name: string;
   email: string;
   role: string;
+  studentData?: {
+    enrollments: Array<{
+      Enrollment_id: number;
+      Course_id: string;
+      Semester: string;
+      Final_grade: string;
+      fieldt_course: {
+        Name: string;
+        Duration: string;
+      };
+    }>;
+  };
+  employeeData?: {
+    Position: string;
+    Salary: number;
+  };
+  coordinatorData?: {
+    organizations: Array<{
+      Org_id: number;
+      Name: string;
+      Contact_info: string;
+    }>;
+    mentors: Array<{
+      Mentor_id: number;
+      person: {
+        Name: string;
+        Email: string;
+      };
+    }>;
+  };
 }
 
 export default function ProfilePage() {
@@ -65,7 +96,7 @@ export default function ProfilePage() {
 
   return (
     <div className="p-8">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="bg-white shadow-md rounded-lg p-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
@@ -77,7 +108,8 @@ export default function ProfilePage() {
             </button>
           </div>
 
-          <div className="space-y-4">
+          {/* Basic Profile Information */}
+          <div className="space-y-4 mb-8">
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Name
@@ -101,6 +133,132 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+
+          {/* Role-specific Information */}
+          {profile.role === "student" && profile.studentData && (
+            <div className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">My Courses</h2>
+              <div className="space-y-4">
+                {profile.studentData.enrollments.map((enrollment) => (
+                  <div
+                    key={enrollment.Enrollment_id}
+                    className="border rounded-lg p-4"
+                  >
+                    <h3 className="font-medium">
+                      {enrollment.fieldt_course.Name}
+                    </h3>
+                    <div className="text-sm text-gray-600">
+                      <p>Course ID: {enrollment.Course_id}</p>
+                      <p>Semester: {enrollment.Semester}</p>
+                      <p>Duration: {enrollment.fieldt_course.Duration}</p>
+                      {enrollment.Final_grade && (
+                        <p>Grade: {enrollment.Final_grade}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {profile.role === "employee" && (
+            <div className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">Admin Access</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <Link
+                  href="/students"
+                  className="p-4 border rounded-lg hover:bg-gray-50"
+                >
+                  Manage Students
+                </Link>
+                <Link
+                  href="/coordinators"
+                  className="p-4 border rounded-lg hover:bg-gray-50"
+                >
+                  Manage Coordinators
+                </Link>
+                <Link
+                  href="/mentors"
+                  className="p-4 border rounded-lg hover:bg-gray-50"
+                >
+                  Manage Mentors
+                </Link>
+                <Link
+                  href="/organizations"
+                  className="p-4 border rounded-lg hover:bg-gray-50"
+                >
+                  Manage Organizations
+                </Link>
+                <Link
+                  href="/fieldt-courses"
+                  className="p-4 border rounded-lg hover:bg-gray-50"
+                >
+                  Manage Courses
+                </Link>
+                <Link
+                  href="/enrollments"
+                  className="p-4 border rounded-lg hover:bg-gray-50"
+                >
+                  Manage Enrollments
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {profile.role === "coordinator" && profile.coordinatorData && (
+            <div className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">Coordinator Access</h2>
+
+              {/* Organizations Section */}
+              <div className="mb-8">
+                <h3 className="text-lg font-medium mb-3">My Organizations</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {profile.coordinatorData.organizations.map((org) => (
+                    <div key={org.Org_id} className="border rounded-lg p-4">
+                      <h4 className="font-medium">{org.Name}</h4>
+                      <p className="text-sm text-gray-600">
+                        {org.Contact_info}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mentors Section */}
+              <div className="mb-8">
+                <h3 className="text-lg font-medium mb-3">My Mentors</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {profile.coordinatorData.mentors.map((mentor) => (
+                    <div
+                      key={mentor.Mentor_id}
+                      className="border rounded-lg p-4"
+                    >
+                      <h4 className="font-medium">{mentor.person.Name}</h4>
+                      <p className="text-sm text-gray-600">
+                        {mentor.person.Email}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick Access Links */}
+              <div className="grid grid-cols-2 gap-4">
+                <Link
+                  href="/students"
+                  className="p-4 border rounded-lg hover:bg-gray-50"
+                >
+                  View Students
+                </Link>
+                <Link
+                  href="/fieldt-courses"
+                  className="p-4 border rounded-lg hover:bg-gray-50"
+                >
+                  View Courses
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

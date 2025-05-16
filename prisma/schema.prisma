@@ -95,7 +95,7 @@ model mentor {
 }
 
 model organization {
-  Org_id          Int               @id
+  Org_id          Int               @id @default(autoincrement())
   Name            String            @db.VarChar(155)
   Contact_info    String            @db.VarChar(150)
   Approval_Status String?           @db.VarChar(10)

@@ -73,11 +73,8 @@ export default function SignUpPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", data.user.role);
 
-      // Refresh the navigation state
-      router.refresh();
-
-      // Redirect to home page since we're already logged in
-      router.push("/");
+      // Force a hard refresh to update all components
+      window.location.href = "/";
     } catch (error) {
       console.error("Error signing up:", error);
       setError(

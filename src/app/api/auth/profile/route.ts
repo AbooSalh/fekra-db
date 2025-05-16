@@ -21,25 +21,52 @@ export async function GET(request: NextRequest) {
 
     // Get user data based on their role
     let userData;
+    let roleSpecificData = {};
+
     switch (decoded.role) {
       case "student":
         userData = await prisma.student.findUnique({
           where: { Student_id: decoded.id },
-          include: { person: true },
+          include: {
+            person: true,
+            enrollment: {
+              include: {
+                fieldt_course: true,
+              },
+            },
+          },
         });
+        if (userData) {
+          roleSpecificData = {
+            studentData: {
+              enrollments: userData.enrollment,
+            },
+          };
+        }
         break;
+
       case "employee":
         userData = await prisma.employee.findUnique({
           where: { Employee_id: decoded.id },
           include: { person: true },
         });
+        if (userData) {
+          roleSpecificData = {
+            employeeData: {
+              Position: userData.Position,
+              Salary: userData.Salary,
+            },
+          };
+        }
         break;
+
       case "mentor":
         userData = await prisma.mentor.findUnique({
           where: { Mentor_id: decoded.id },
           include: { person: true },
         });
         break;
+
       default:
         return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     }
@@ -54,6 +81,7 @@ export async function GET(request: NextRequest) {
       role: decoded.role,
       name: userData.person?.Name || userData.Name,
       email: userData.person?.Email,
+      ...roleSpecificData,
     };
 
     return NextResponse.json(profile);

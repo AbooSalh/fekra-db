@@ -55,6 +55,15 @@ export default function OrganizationForm({
     setIsSubmitting(true);
 
     try {
+      const requestBody = {
+        Name: formData.name,
+        Contact_info: formData.contactInfo,
+        Approval_Status: formData.approvalStatus || null,
+        Coordinator_id: formData.coordinatorId
+          ? parseInt(formData.coordinatorId)
+          : null,
+      };
+
       const response = await fetch(
         `/api/organizations${isEdit ? `/${initialData?.Org_id}` : ""}`,
         {
@@ -62,21 +71,14 @@ export default function OrganizationForm({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            name: formData.name,
-            contactInfo: formData.contactInfo,
-            approvalStatus: formData.approvalStatus || null,
-            coordinatorId: formData.coordinatorId
-              ? parseInt(formData.coordinatorId)
-              : null,
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to save organization");
+        throw new Error(data.error || "Failed to save organization");
       }
 
       router.push("/organizations");
