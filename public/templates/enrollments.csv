@@ -1,0 +1,16 @@
+# Enrollment CSV Template
+# Required fields: Student_id, Course_id, Semester
+# Optional fields: Final_grade, Coordinator_id
+# CSV Format: Student_id,Course_id,Semester,Final_grade,Coordinator_id
+
+Student_id,Course_id,Semester,Final_grade,Coordinator_id
+30,CS101,Fall2023,A,1
+31,CS102,Fall2023,B,2
+32,CS103,Spring2023,C,3
+33,CS104,Fall2023,,1
+34,CS105,Spring2023,B,2
+35,CS106,Fall2023,A,3
+36,CS107,Spring2023,,1
+30,CS108,Fall2023,B,2
+31,CS109,Spring2023,A,3
+32,CS110,Fall2023,C,1 

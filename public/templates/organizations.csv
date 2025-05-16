@@ -1,0 +1,16 @@
+# Organization CSV Template
+# Required fields: Name, Contact_info
+# Optional fields: Approval_Status (defaults to "Pending"), Coordinator_id (must match an existing coordinator ID)
+# CSV Format: Name,Contact_info,Approval_Status,Coordinator_id
+
+Name,Contact_info,Approval_Status,Coordinator_id
+"Tech Solutions Inc","contact@techsolutions.com","Approved",1
+"Digital Innovations","info@digitalinnovations.com","Pending",2
+"Global Software Systems","hr@globalsoft.com","Approved",1
+"Future Tech Labs","contact@futuretech.com","Pending",2
+"Smart Solutions Co","info@smartsolutions.com","Approved",1
+"Innovative Systems","support@innovativesystems.com","Pending",2
+"Tech Pioneers","contact@techpioneers.com","Approved",1
+"Digital Dynamics","info@digitaldynamics.com","Pending",2
+"NextGen Technologies","hr@nextgen.com","Approved",1
+"Smart Systems Inc","contact@smartsystems.com","Pending",2 

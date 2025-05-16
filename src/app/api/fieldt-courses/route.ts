@@ -1,39 +1,46 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/generated/prisma/client";
-
-const prisma = new PrismaClient();
+import { verifyToken } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 // GET all fieldt courses
-export async function GET() {
-  const fieldtCourses = await prisma.fieldt_course.findMany({
-    include: {
-      organization: true,
-      enroll: {
-        include: {
-          student: {
-            include: {
-              person: true,
-            },
+export async function GET(request: NextRequest) {
+  try {
+    // Verify authentication
+    const token = request.headers.get("Authorization")?.split(" ")[1];
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await verifyToken(token);
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Get all courses with their organization information
+    const courses = await prisma.fieldt_course.findMany({
+      include: {
+        organization: {
+          select: {
+            Name: true,
           },
         },
       },
-      enrollment: {
-        include: {
-          student: {
-            include: {
-              person: true,
-            },
-          },
-        },
+      orderBy: {
+        Name: "asc",
       },
-      mentor: {
-        include: {
-          person: true,
-        },
+    });
+
+    return NextResponse.json(courses);
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return NextResponse.json(
+      {
+        error: "Failed to fetch courses",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
-    },
-  });
-  return NextResponse.json(fieldtCourses);
+      { status: 500 }
+    );
+  }
 }
 
 // POST new fieldt course

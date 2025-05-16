@@ -1,4 +1,5 @@
-Mentor_id,Name,Email,Sex,Type,Department,Organization
-1,John Doe,john.doe@example.com,M,internal,Computer Science,
-2,Jane Smith,jane.smith@example.com,F,external,,Tech Corp
-3,Bob Johnson,bob.johnson@example.com,M,internal,Mathematics, 
+# Note: Course_id must match an existing course ID from the list shown on the mentors page
+# Format: Name,Email,Sex,Course_id
+Name,Email,Sex,Course_id
+John Doe,john.doe@example.com,M,CS101
+Jane Smith,jane.smith@example.com,F,CS102 

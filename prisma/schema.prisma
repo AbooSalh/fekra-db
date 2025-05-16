@@ -10,7 +10,7 @@ datasource db {
 model coordinator {
   Coordinator_id Int            @id
   Name           String?        @db.VarChar(155)
-  Department     String         @db.VarChar(150)
+  Department     String?        @db.VarChar(150)
   enrollment     enrollment[]
   organization   organization[]
   person         person         @relation(fields: [Coordinator_id], references: [Person_id], onUpdate: Restrict)
@@ -34,7 +34,7 @@ model enroll {
 }
 
 model enrollment {
-  Enrollment_id  Int            @id
+  Enrollment_id  Int            @id @default(autoincrement())
   Student_id     Int?
   Course_id      String?        @db.VarChar(155)
   Semester       String?        @db.VarChar(155)
@@ -118,6 +118,7 @@ model person {
   employee       employee?
   mentor         mentor?
   student        student?
+  coordinator    coordinator?
 }
 
 model student {
