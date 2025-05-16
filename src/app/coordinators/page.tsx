@@ -3,45 +3,33 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-interface Enrollment {
-  Enrollment_id: number;
-  Student_id: number | null;
-  Course_id: string | null;
-  Semester: string | null;
-  Final_grade: string | null;
-  Coordinator_id: number | null;
-  student?: {
-    Student_id: number;
-    person: {
-      Name: string;
-      Email: string;
-    };
-  };
-  fieldt_course?: {
-    Course_id: string;
+interface Coordinator {
+  Coordinator_id: number;
+  Name: string;
+  enrollment?: {
+    Enrollment_id: number;
+  }[];
+  organization?: {
+    Org_id: number;
     Name: string;
-  };
-  coordinator?: {
-    Coordinator_id: number;
-    Name: string;
-  };
+  }[];
 }
 
-export default function EnrollmentsPage() {
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+export default function CoordinatorsPage() {
+  const [coordinators, setCoordinators] = useState<Coordinator[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchEnrollments();
+    fetchCoordinators();
   }, []);
 
-  const fetchEnrollments = async () => {
+  const fetchCoordinators = async () => {
     try {
-      const response = await fetch("/api/enrollments");
-      if (!response.ok) throw new Error("Failed to fetch enrollments");
+      const response = await fetch("/api/coordinators");
+      if (!response.ok) throw new Error("Failed to fetch coordinators");
       const data = await response.json();
-      setEnrollments(data);
+      setCoordinators(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -56,12 +44,12 @@ export default function EnrollmentsPage() {
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Enrollments</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Coordinators</h1>
           <Link
-            href="/enrollments/new"
+            href="/coordinators/new"
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
           >
-            Add New Enrollment
+            Add New Coordinator
           </Link>
         </div>
 
@@ -70,22 +58,13 @@ export default function EnrollmentsPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Enrollment ID
+                  Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Student
+                  Enrollments
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Course
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Semester
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Final Grade
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Coordinator
+                  Organizations
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                   Actions
@@ -93,35 +72,26 @@ export default function EnrollmentsPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {enrollments.map((enrollment) => (
-                <tr key={enrollment.Enrollment_id}>
+              {coordinators.map((coordinator) => (
+                <tr key={coordinator.Coordinator_id}>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {enrollment.Enrollment_id}
+                    {coordinator.Name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {enrollment.student?.person.Name || "Not assigned"}
+                    {coordinator.enrollment?.length || 0} enrollments
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {enrollment.fieldt_course?.Name || "Not assigned"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {enrollment.Semester || "Not set"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {enrollment.Final_grade || "Not graded"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {enrollment.coordinator?.Name || "Not assigned"}
+                    {coordinator.organization?.length || 0} organizations
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     <Link
-                      href={`/enrollments/${enrollment.Enrollment_id}`}
+                      href={`/coordinators/${coordinator.Coordinator_id}`}
                       className="text-blue-600 hover:text-blue-900 mr-4"
                     >
                       View
                     </Link>
                     <Link
-                      href={`/enrollments/${enrollment.Enrollment_id}/edit`}
+                      href={`/coordinators/${coordinator.Coordinator_id}/edit`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Edit

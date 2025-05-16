@@ -131,7 +131,7 @@ export default function EnrollForm({
           onChange={(e) =>
             setFormData({ ...formData, studentId: e.target.value })
           }
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
           required
         >
           <option value="">Select a student</option>
@@ -156,7 +156,7 @@ export default function EnrollForm({
           onChange={(e) =>
             setFormData({ ...formData, courseId: e.target.value })
           }
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
           required
         >
           <option value="">Select a course</option>

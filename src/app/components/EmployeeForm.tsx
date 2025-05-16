@@ -114,7 +114,7 @@ export default function EmployeeForm({
           onChange={(e) =>
             setFormData({ ...formData, personId: e.target.value })
           }
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
           required
           disabled={isEdit}
         >
@@ -141,7 +141,7 @@ export default function EmployeeForm({
           onChange={(e) =>
             setFormData({ ...formData, position: e.target.value })
           }
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
           required
         />
       </div>
@@ -158,7 +158,7 @@ export default function EmployeeForm({
           id="salary"
           value={formData.salary}
           onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
           placeholder="Enter salary (optional)"
         />
       </div>
