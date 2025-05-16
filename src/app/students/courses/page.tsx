@@ -1,39 +1,57 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-interface FieldCourse {
-  Course_id: string;
-  Name: string;
-  Duration: string;
-  Org_id: number | null;
-  organization?: {
-    Name: string;
-  };
+interface Course {
+  courseId: string;
+  courseName: string;
+  duration: string;
+  organization: string;
+  semester: string;
+  finalGrade: string | null;
 }
 
-export default function FieldCoursesPage() {
-  const [courses, setCourses] = useState<FieldCourse[]>([]);
+export default function StudentCoursesPage() {
+  const router = useRouter();
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchCourses();
-  }, []);
+    const fetchCourses = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          router.push("/auth/login");
+          return;
+        }
 
-  const fetchCourses = async () => {
-    try {
-      const response = await fetch("/api/fieldt-courses");
-      if (!response.ok) throw new Error("Failed to fetch courses");
-      const data = await response.json();
-      setCourses(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
+        const response = await fetch("/api/students/courses", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            router.push("/auth/login");
+            return;
+          }
+          throw new Error("Failed to fetch courses");
+        }
+
+        const data = await response.json();
+        setCourses(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, [router]);
 
   if (loading) return <div className="p-8">Loading...</div>;
   if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
@@ -41,65 +59,52 @@ export default function FieldCoursesPage() {
   return (
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Field Courses</h1>
-          <Link
-            href="/field-courses/new"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-          >
-            Add New Course
-          </Link>
-        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">My Courses</h1>
 
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                  Course Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                   Course ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Duration
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                   Organization
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-                  Actions
+                  Duration
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                  Semester
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                  Grade
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {courses.map((course) => (
-                <tr key={course.Course_id}>
+                <tr key={course.courseId}>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {course.Course_id}
+                    {course.courseName}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {course.Name}
+                    {course.courseId}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {course.Duration}
+                    {course.organization}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    {course.organization?.Name || "Not assigned"}
+                    {course.duration}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    <Link
-                      href={`/field-courses/${course.Course_id}`}
-                      className="text-blue-600 hover:text-blue-900 mr-4"
-                    >
-                      View
-                    </Link>
-                    <Link
-                      href={`/field-courses/${course.Course_id}/edit`}
-                      className="text-indigo-600 hover:text-indigo-900"
-                    >
-                      Edit
-                    </Link>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                    {course.semester}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                    {course.finalGrade || "Not graded"}
                   </td>
                 </tr>
               ))}

@@ -9,28 +9,39 @@ export function middleware(request: NextRequest) {
 
   // Define public paths that don't require authentication
   const isPublicPath =
-    path === "/api/auth/login" || path === "/api/auth/signup";
-
-  // Get the token from the Authorization header
-  const token = request.headers.get("Authorization")?.split(" ")[1];
+    path === "/auth/login" ||
+    path === "/auth/signup" ||
+    path === "/api/auth/login" ||
+    path === "/api/auth/signup";
 
   // If the path is public, allow access
   if (isPublicPath) {
     return NextResponse.next();
   }
 
+  // Get the token from either the Authorization header or cookies
+  const authHeader = request.headers.get("Authorization");
+  const token =
+    authHeader?.split(" ")[1] || request.cookies.get("token")?.value;
+
   // If there's no token, redirect to login
   if (!token) {
-    return NextResponse.json(
-      { message: "Authentication required" },
-      { status: 401 }
-    );
+    if (path.startsWith("/api/")) {
+      return NextResponse.json(
+        { message: "Authentication required" },
+        { status: 401 }
+      );
+    }
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   // Verify the token
   const verifiedToken = verifyToken(token);
   if (!verifiedToken) {
-    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    if (path.startsWith("/api/")) {
+      return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    }
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   // Add user info to request headers
@@ -45,7 +56,15 @@ export function middleware(request: NextRequest) {
   });
 }
 
-// Configure which routes to run middleware on
+// Configure which paths the middleware should run on
 export const config = {
-  matcher: ["/api/:path*", "/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!_next/static|_next/image|favicon.ico).*)",
+  ],
 };

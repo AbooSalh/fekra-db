@@ -78,23 +78,16 @@ export async function POST(request: Request) {
       role: role,
     });
 
-    return NextResponse.json(
-      {
-        message: "User created successfully",
-        user: {
-          id: newPerson.Person_id,
-          email: newPerson.Email,
-          name: newPerson.Name,
-          role: role,
-          ...(role === "student" && {
-            majorDept,
-            level,
-          }),
-        },
-        token,
+    return NextResponse.json({
+      message: "User created successfully",
+      user: {
+        id: newPerson.Person_id,
+        email: newPerson.Email,
+        name: newPerson.Name,
+        role: role,
       },
-      { status: 201 }
-    );
+      token,
+    });
   } catch (error) {
     console.error("Signup error:", error);
     return NextResponse.json(

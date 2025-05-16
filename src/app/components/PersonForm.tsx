@@ -92,7 +92,7 @@ export default function PersonForm({
           id="name"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
           required
         />
       </div>
@@ -109,7 +109,7 @@ export default function PersonForm({
           id="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
           placeholder="Enter email (optional)"
         />
       </div>
@@ -125,7 +125,7 @@ export default function PersonForm({
           id="sex"
           value={formData.sex}
           onChange={(e) => setFormData({ ...formData, sex: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
         >
           <option value="">Select sex (optional)</option>
           <option value="M">Male</option>
@@ -148,7 +148,7 @@ export default function PersonForm({
             onChange={(e) =>
               setFormData({ ...formData, password: e.target.value })
             }
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
             required
           />
         </div>
