@@ -1,0 +1,120 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+
+interface Organization {
+  Org_id: number;
+  Name: string;
+  Contact_info: string;
+  Approval_Status: string | null;
+  coordinator?: {
+    Name: string;
+  };
+}
+
+export default function OrganizationsPage() {
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchOrganizations();
+  }, []);
+
+  const fetchOrganizations = async () => {
+    try {
+      const response = await fetch("/api/organizations");
+      if (!response.ok) throw new Error("Failed to fetch organizations");
+      const data = await response.json();
+      setOrganizations(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <div className="p-8">Loading...</div>;
+  if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
+
+  return (
+    <div className="p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Organizations</h1>
+          <Link
+            href="/organizations/new"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+          >
+            Add New Organization
+          </Link>
+        </div>
+
+        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Contact Info
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Approval Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Coordinator
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {organizations.map((org) => (
+                <tr key={org.Org_id}>
+                  <td className="px-6 py-4 whitespace-nowrap">{org.Name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {org.Contact_info}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        org.Approval_Status === "Approved"
+                          ? "bg-green-100 text-green-800"
+                          : org.Approval_Status === "Pending"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {org.Approval_Status || "Not Set"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {org.coordinator?.Name || "Not assigned"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Link
+                      href={`/organizations/${org.Org_id}`}
+                      className="text-blue-600 hover:text-blue-900 mr-4"
+                    >
+                      View
+                    </Link>
+                    <Link
+                      href={`/organizations/${org.Org_id}/edit`}
+                      className="text-indigo-600 hover:text-indigo-900"
+                    >
+                      Edit
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
