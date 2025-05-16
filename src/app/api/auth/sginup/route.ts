@@ -6,11 +6,20 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
   try {
-    const { email, password, name, sex, role } = await request.json();
+    const { email, password, name, sex, role, majorDept, level } =
+      await request.json();
 
     if (!email || !password || !name || !role) {
       return NextResponse.json(
         { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Additional validation for students
+    if (role === "student" && (!majorDept || !level)) {
+      return NextResponse.json(
+        { message: "Major department and level are required for students" },
         { status: 400 }
       );
     }
@@ -39,8 +48,8 @@ export async function POST(request: Request) {
         ...(role === "student" && {
           student: {
             create: {
-              Major_Dept: "Computer Science",
-              Level: "1",
+              Major_Dept: majorDept,
+              Level: level,
             },
           },
         }),
@@ -77,6 +86,10 @@ export async function POST(request: Request) {
           email: newPerson.Email,
           name: newPerson.Name,
           role: role,
+          ...(role === "student" && {
+            majorDept,
+            level,
+          }),
         },
         token,
       },
