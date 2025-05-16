@@ -1,17 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/generated/prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
+import { verifyToken } from "@/lib/auth";
 
 // GET all coordinators
-export async function GET() {
-  const coordinators = await prisma.coordinator.findMany({
-    include: {
-      enrollment: true,
-      organization: true,
-    },
-  });
-  return NextResponse.json(coordinators);
+export async function GET(request: NextRequest) {
+  try {
+    // Verify token
+    const token = request.headers.get("Authorization")?.split(" ")[1];
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const decoded = await verifyToken(token);
+    if (!decoded) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    // Get all coordinators with their relations
+    const coordinators = await prisma.coordinator.findMany({
+      include: {
+        enrollment: true,
+        organization: true,
+      },
+    });
+
+    return NextResponse.json(coordinators);
+  } catch (error) {
+    console.error("Error fetching coordinators:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch coordinators" },
+      { status: 500 }
+    );
+  }
 }
 
 // POST new coordinator

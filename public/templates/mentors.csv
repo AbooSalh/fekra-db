@@ -1,0 +1,4 @@
+Mentor_id,Name,Email,Sex,Type,Department,Organization
+1,John Doe,john.doe@example.com,M,internal,Computer Science,
+2,Jane Smith,jane.smith@example.com,F,external,,Tech Corp
+3,Bob Johnson,bob.johnson@example.com,M,internal,Mathematics, 
