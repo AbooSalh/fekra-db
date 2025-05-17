@@ -49,6 +49,14 @@ export default function PersonsPage() {
   return (
     <div className="p-8">
       <div className="max-w-5xl mx-auto">
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
+          <p className="text-blue-900 font-medium">
+            <strong>Note:</strong> You can add persons by their role in their
+            respective sections (e.g., add students in the{" "}
+            <span className="font-semibold">Students</span> page, mentors in the{" "}
+            <span className="font-semibold">Mentors</span> page, etc.).
+          </p>
+        </div>
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Persons</h1>
           <div>
