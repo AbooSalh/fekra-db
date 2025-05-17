@@ -144,6 +144,17 @@ export default function Home() {
               </p>
             </Link>
             <Link
+              href="/persons"
+              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            >
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                Persons
+              </h2>
+              <p className="text-gray-600">
+                Manage person records and information
+              </p>
+            </Link>
+            <Link
               href="/coordinators"
               className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
