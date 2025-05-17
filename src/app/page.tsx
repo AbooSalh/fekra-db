@@ -190,6 +190,17 @@ export default function Home() {
               </h2>
               <p className="text-gray-600">Student enrollment management</p>
             </Link>
+            <Link
+              href="/employees/report"
+              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            >
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                System Report
+              </h2>
+              <p className="text-gray-600">
+                View system overview and statistics
+              </p>
+            </Link>
           </div>
         </div>
       </main>
