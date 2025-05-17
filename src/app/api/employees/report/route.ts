@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    // Fetch various statistics for the report
+    // Basic Statistics
     const [
       totalStudents,
       totalMentors,
@@ -12,6 +12,10 @@ export async function GET() {
       totalEnrollments,
       activeEnrollments,
       pendingOrganizations,
+      totalCoordinators,
+      totalEmployees,
+      totalInternalMentors,
+      totalExternalMentors,
     ] = await Promise.all([
       prisma.student.count(),
       prisma.mentor.count(),
@@ -28,35 +32,101 @@ export async function GET() {
           Approval_Status: "pending",
         },
       }),
+      prisma.coordinator.count(),
+      prisma.employee.count(),
+      prisma.internal_mentor.count(),
+      prisma.external_mentor.count(),
     ]);
 
-    // Get recent enrollments
-    const recentEnrollments = await prisma.enrollment.findMany({
-      take: 5,
-      orderBy: {
-        Enrollment_id: "desc",
+    // Department Statistics
+    const departmentStats = await prisma.student.groupBy({
+      by: ["Major_Dept"],
+      _count: {
+        Student_id: true,
       },
+    });
+
+    // Course Statistics
+    const courseStats = await prisma.fieldt_course.findMany({
       include: {
-        student: {
-          include: {
-            person: true,
+        _count: {
+          select: {
+            enroll: true,
+            enrollment: true,
+            mentor: true,
           },
         },
-        fieldt_course: true,
+      },
+    });
+
+    // Organization Statistics
+    const organizationStats = await prisma.organization.findMany({
+      include: {
+        _count: {
+          select: {
+            fieldt_course: true,
+            external_mentor: true,
+          },
+        },
+      },
+    });
+
+    // Grade Distribution
+    const gradeDistribution = await prisma.enrollment.groupBy({
+      by: ["Final_grade"],
+      _count: {
+        Enrollment_id: true,
+      },
+      where: {
+        Final_grade: {
+          not: null,
+        },
+      },
+    });
+
+    // Active Courses (with active enrollments)
+    const activeCourses = await prisma.fieldt_course.findMany({
+      where: {
+        enrollment: {
+          some: {
+            Final_grade: null,
+          },
+        },
+      },
+      include: {
+        _count: {
+          select: {
+            enrollment: true,
+          },
+        },
       },
     });
 
     return NextResponse.json({
       statistics: {
-        totalStudents,
-        totalMentors,
-        totalOrganizations,
-        totalCourses,
-        totalEnrollments,
-        activeEnrollments,
-        pendingOrganizations,
+        overview: {
+          totalStudents,
+          totalMentors,
+          totalOrganizations,
+          totalCourses,
+          totalEnrollments,
+          activeEnrollments,
+          pendingOrganizations,
+          totalCoordinators,
+          totalEmployees,
+          totalInternalMentors,
+          totalExternalMentors,
+        },
+        departmentStats,
+        courseStats,
+        organizationStats,
+        gradeDistribution,
+        activeCourses: activeCourses.map((course) => ({
+          courseId: course.Course_id,
+          name: course.Name,
+          activeEnrollments: course._count.enrollment,
+        })),
       },
-      recentEnrollments,
     });
   } catch (error) {
     console.error("Error fetching report data:", error);

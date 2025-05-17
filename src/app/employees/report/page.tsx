@@ -18,26 +18,54 @@ import {
 
 interface ReportData {
   statistics: {
-    totalStudents: number;
-    totalMentors: number;
-    totalOrganizations: number;
-    totalCourses: number;
-    totalEnrollments: number;
-    activeEnrollments: number;
-    pendingOrganizations: number;
-  };
-  recentEnrollments: Array<{
-    Enrollment_id: number;
-    Semester: string;
-    student: {
-      person: {
-        Name: string;
+    overview: {
+      totalStudents: number;
+      totalMentors: number;
+      totalOrganizations: number;
+      totalCourses: number;
+      totalEnrollments: number;
+      activeEnrollments: number;
+      pendingOrganizations: number;
+      totalCoordinators: number;
+      totalEmployees: number;
+      totalInternalMentors: number;
+      totalExternalMentors: number;
+    };
+    departmentStats: Array<{
+      Major_Dept: string;
+      _count: {
+        Student_id: number;
       };
-    };
-    fieldt_course: {
+    }>;
+    courseStats: Array<{
+      Course_id: string;
       Name: string;
-    };
-  }>;
+      _count: {
+        enroll: number;
+        enrollment: number;
+        mentor: number;
+      };
+    }>;
+    organizationStats: Array<{
+      Org_id: number;
+      Name: string;
+      _count: {
+        fieldt_course: number;
+        external_mentor: number;
+      };
+    }>;
+    gradeDistribution: Array<{
+      Final_grade: string;
+      _count: {
+        Enrollment_id: number;
+      };
+    }>;
+    activeCourses: Array<{
+      courseId: string;
+      name: string;
+      activeEnrollments: number;
+    }>;
+  };
 }
 
 export default function EmployeeReport() {
@@ -92,6 +120,7 @@ export default function EmployeeReport() {
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-8">System Overview Report</h1>
 
+      {/* Overview Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <Card>
           <CardHeader>
@@ -99,7 +128,7 @@ export default function EmployeeReport() {
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">
-              {reportData.statistics.totalStudents}
+              {reportData.statistics.overview.totalStudents}
             </p>
           </CardContent>
         </Card>
@@ -110,7 +139,11 @@ export default function EmployeeReport() {
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">
-              {reportData.statistics.totalMentors}
+              {reportData.statistics.overview.totalMentors}
+            </p>
+            <p className="text-sm text-gray-500">
+              Internal: {reportData.statistics.overview.totalInternalMentors} |
+              External: {reportData.statistics.overview.totalExternalMentors}
             </p>
           </CardContent>
         </Card>
@@ -121,7 +154,10 @@ export default function EmployeeReport() {
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">
-              {reportData.statistics.totalOrganizations}
+              {reportData.statistics.overview.totalOrganizations}
+            </p>
+            <p className="text-sm text-gray-500">
+              Pending: {reportData.statistics.overview.pendingOrganizations}
             </p>
           </CardContent>
         </Card>
@@ -132,7 +168,7 @@ export default function EmployeeReport() {
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">
-              {reportData.statistics.totalCourses}
+              {reportData.statistics.overview.totalCourses}
             </p>
           </CardContent>
         </Card>
@@ -143,53 +179,159 @@ export default function EmployeeReport() {
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">
-              {reportData.statistics.totalEnrollments}
+              {reportData.statistics.overview.totalEnrollments}
+            </p>
+            <p className="text-sm text-gray-500">
+              Active: {reportData.statistics.overview.activeEnrollments}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Active Enrollments</CardTitle>
+            <CardTitle>Total Coordinators</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">
-              {reportData.statistics.activeEnrollments}
+              {reportData.statistics.overview.totalCoordinators}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Pending Organizations</CardTitle>
+            <CardTitle>Total Employees</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">
-              {reportData.statistics.pendingOrganizations}
+              {reportData.statistics.overview.totalEmployees}
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="mt-8">
+      {/* Department Statistics */}
+      <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Recent Enrollments</CardTitle>
+          <CardTitle>Department Statistics</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Student Name</TableHead>
-                <TableHead>Course</TableHead>
-                <TableHead>Semester</TableHead>
+                <TableHead>Department</TableHead>
+                <TableHead>Number of Students</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {reportData.recentEnrollments.map((enrollment) => (
-                <TableRow key={enrollment.Enrollment_id}>
-                  <TableCell>{enrollment.student.person.Name}</TableCell>
-                  <TableCell>{enrollment.fieldt_course.Name}</TableCell>
-                  <TableCell>{enrollment.Semester}</TableCell>
+              {reportData.statistics.departmentStats.map((dept) => (
+                <TableRow key={dept.Major_Dept}>
+                  <TableCell>{dept.Major_Dept}</TableCell>
+                  <TableCell>{dept._count.Student_id}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* Course Statistics */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Course Statistics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Course</TableHead>
+                <TableHead>Enrollments</TableHead>
+                <TableHead>Mentors</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {reportData.statistics.courseStats.map((course) => (
+                <TableRow key={course.Course_id}>
+                  <TableCell>{course.Name}</TableCell>
+                  <TableCell>{course._count.enrollment}</TableCell>
+                  <TableCell>{course._count.mentor}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* Organization Statistics */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Organization Statistics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Organization</TableHead>
+                <TableHead>Courses</TableHead>
+                <TableHead>External Mentors</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {reportData.statistics.organizationStats.map((org) => (
+                <TableRow key={org.Org_id}>
+                  <TableCell>{org.Name}</TableCell>
+                  <TableCell>{org._count.fieldt_course}</TableCell>
+                  <TableCell>{org._count.external_mentor}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* Grade Distribution */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Grade Distribution</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Grade</TableHead>
+                <TableHead>Count</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {reportData.statistics.gradeDistribution.map((grade) => (
+                <TableRow key={grade.Final_grade}>
+                  <TableCell>{grade.Final_grade}</TableCell>
+                  <TableCell>{grade._count.Enrollment_id}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* Active Courses */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Active Courses</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Course</TableHead>
+                <TableHead>Active Enrollments</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {reportData.statistics.activeCourses.map((course) => (
+                <TableRow key={course.courseId}>
+                  <TableCell>{course.name}</TableCell>
+                  <TableCell>{course.activeEnrollments}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
