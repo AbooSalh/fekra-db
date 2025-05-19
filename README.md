@@ -36,26 +36,21 @@ JWT_SECRET="your secret"
 4. Set up the database:
 
 ```bash
-# This command will:
-# - Create the database tables based on your schema
-# - Create a migrations folder to track schema changes
-# - Apply any pending migrations
+
 npx prisma migrate dev
 ```
 
 5. Generate Prisma Client:
 
 ```bash
-# This creates the Prisma Client based on your schema
-# The client is used to interact with your database
+
 npx prisma generate
 ```
 
 6. Seed the database with initial data:
 
 ```bash
-# This populates your database with initial data
-# including admin, mentor, and student accounts
+
 npx prisma db seed
 ```
 
